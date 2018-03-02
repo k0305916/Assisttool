@@ -7,6 +7,7 @@
 #include <vector>
 #include <map>
 #include <algorithm>
+#include <iostream>
 
 //大量的路段数据
 struct Emroadseq
@@ -32,7 +33,9 @@ std::map<std::string, Emroadseq> m_emroadSeq;
 double CalcDis(MyPoint p1, MyPoint p2)
 {
 	double result = 0.0;
-	return result;
+	auto x = p1.x - p2.x;
+	auto y = p1.y - p2.y;
+	return sqrt(x * x + y * y);
 }
 
 double CalcDis(std::string road)
@@ -64,12 +67,22 @@ void findPaths(Emroadseq source, Emroadseq target,
 
 	for (auto road : source.adjacency)
 	{
+		//跳过已经存在与route中的road，以免无限循环
+		auto iter = std::find_if(route.begin(), route.end(), [road](std::string item) {
+			if (item.compare(road) == 0) return true; return false;
+		});
+		if (iter != route.end())
+			continue;
+		
+		auto roaditer = m_emroadSeq.find(road);
+		if (roaditer == m_emroadSeq.end())
+			continue;
 		findPaths(m_emroadSeq[road], target, route, length, match, matchlength);
 	}
 }
 
 std::list<std::list<std::string>> findPaths(Emroadseq from, Emroadseq to,
-	std::list<double> matchlength)
+	std::list<double>& matchlength)
 {
 	std::list<std::list<std::string>> matchroadlist;
 	std::list<std::string> route;
@@ -135,7 +148,7 @@ void init()
 	road.lat_s = 22.5501397;
 	road.lng_e = 113.8901444;
 	road.lat_e = 22.55020577;
-	std::string path2[] = { "0", "675", "679", "680", "57847" };
+	std::string path2[] = { "0", "675", "71", "680", "57847" };
 	roadlist.clear();
 	std::for_each(std::begin(path2), std::end(path2), [&roadlist](auto road) {
 		roadlist.push_back(road);
