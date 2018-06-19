@@ -1,25 +1,76 @@
-#排队接水问题
-# n个人一起排队接水，第i个人需要a[i]的时间来接水。1 <= n <= 1000,
-#1 <= a[i] <= 1000同时只能有一个人接水，正在接水的人和没有接水的人都需要等待。
-# 完成接水的人会立刻消失，不会继续等待。你可以决定所有人接水的顺序，
-# 并希望最小化所有人等待时间的总和。
-#----感觉上这仍然是一个动态规划/贪心算法的问题
+# 继MIUI8推出手机分身功能之后，MIUI9计划推出一个电话号码分身的功能：首先将电话号码中的每个数字加上8取个位，
+# 然后使用对应的大写字母代替 （"ZERO", "ONE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN", "EIGHT",
+#  "NINE"）， 然后随机打乱这些字母，所生成的字符串即为电话号码对应的分身。
+# 输入描述:
+# 第一行是一个整数T（1 ≤ T ≤ 100)表示测试样例数；接下来T行，每行给定一个分身后的电话号码的分身（
+# 长度在3到10000之间）。
+# 输出描述:
+# 输出T行，分别对应输入中每行字符串对应的分身前的最小电话号码（允许前导0）。
+# 示例1
+# -----
+# 输入
+# 4
+# EIGHT
+# ZEROTWOONE
+# OHWETENRTEO
+# OHEWTIEGTHENRTEO
+# -----
+# 输出
+# 0
+# 234
+# 345
+# 0345
 
-import random
 
-persionN = int(input('input the number of persion: '))
-ReceiveWaterTime = {}
-for i in range(1, persionN+1):
-    ReceiveWaterTime[i] = random.randint(1, 1000)
+def Init():
+    string = ["ZERO", "ONE", "TWO", "THREE", "FOUR",
+              "FIVE", "SIX", "SEVEN", "EIGHT", "NINE"]
+    charstring = set('')
+    dic = {}
+    for item in string:
+        charstring = charstring | set(item)
+    for c in charstring:
+        for item in string:
+            if c in item:
+                if c not in dic:
+                    dic[c] = [item]
+                else:
+                    dic[c].append(item)
+    return dic
 
-#全排列的方式
+
+def GetStringArrayPossibility(text, dic):
+    result = []
+    while len(text) > 0:
+        for c in text:
+            pass
+    return result
 
 
-#贪心算法：总是选择最小的----但是这个能保证是全局最小吗？
-temp = dict(sorted(ReceiveWaterTime.items(),
-                   key=lambda d: d[1], reverse=False))
-sumtime = 0
-for i in range(1, len(temp)):
-    #通过计算公式一次性得到时间总和
-    sumtime += (temp[i]*(len(temp)-i+1))
-print(sumtime)
+def GetNumber(text):
+    dic = {'ONE': 1, 'Two': 2, 'THREE': 3, 'FOUR': 4, 'FIVE': 5, 'SIX': 6, 'SEVEN': 7, 'EIGHT': 8,
+           'NINE': 9, 'ZERO': 0}
+    return dic[text]
+
+
+def GetMinSequence(number):
+    return sorted(number)
+
+
+def GetOriginalNumber(number):
+    original = []
+    for num in number:
+        original.append((10 + (num - 8)) % 10)
+    return original
+
+initdic = Init()
+print(initdic)
+number = int(input("Input number please: "))
+for i in range(number):
+    text = input('Input string please: ')
+    possbilityArray = GetStringArrayPossibility(text, initdic)
+    possbilityNumber = GetNumber(possbilityArray)
+    possbilityMinNumber = GetMinSequence(possbilityNumber)
+    possibilityOriginNumber = GetOriginalNumber(possbilityMinNumber)
+    result = ''.join(possibilityOriginNumber)
+    print(result)
