@@ -53,8 +53,8 @@ def GetStringArrayPossibility(text, dic):
     print(result)
     # get result max--python3
     # max(result.items(), key=operator.itemgetter(1))[0]
-    compareresult = {k: v for k, v in result.items() if (len(k) <= v) and 
-    (len(set(k) & set(text)) == len(set(k)))}.keys()
+    compareresult = {k: v for k, v in result.items() if (len(k) <= v) and
+                     (len(set(k) & set(text)) == len(set(k)))}.keys()
     print(compareresult)
     return compareresult
 
@@ -92,7 +92,7 @@ for i in range(number):
     possbilityNumber = GetNumber(possbilityvalue)
     possibilityOriginNumber = GetOriginalNumber(possbilityNumber)
     result = GetMinSequence(possibilityOriginNumber)
-    
+
     # if len(possibilityOriginNumber) <= 1:
     #     result = possibilityOriginNumber[0]
     # else:
