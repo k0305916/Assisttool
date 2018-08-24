@@ -1,42 +1,164 @@
-#include <iostream>
-#include <string.h>
+/*
+<<<<<<< HEAD
+请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。
+路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向左，向右，向上，向下移动一个格子。
+如果一条路径经过了矩阵中的某一个格子，则之后不能再次进入这个格子。 
+例如 a b c e s f c s a d e e 这样的3 X 4 矩阵中包含一条字符串"bcced"的路径，
+但是矩阵中不包含"abcb"路径，
+因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入该格子。
+*/
 
-void replaceSpace(char *str, int length)
+#include <iostream>
+#include <list>
+#include <memory>
+#include <string>
+using namespace std;
+
+char pmatrix[][4] = {{'a', 'b', 'c', 'e'}, {'s', 'f', 'c', 's'}, {'a', 'd', 'e', 'e'}};
+int g_stri = 0;
+char *findstr = "bcced";
+char *findstr1 = "abcb";
+int rows = 3, cols = 4;
+
+bool FindFirstChar(char *matrix, int row, int col, char c)
 {
-    for(auto i = 0;i<length;)
-    {
-        if(str[i] == ' ')
-        {
-            auto size = strlen("%20");
-            char* temp = new char[length-1+size];
-            memcpy(temp,str,i);
-            memcpy(temp+i,"%20",size);
-            memcpy(temp+i+size,str+i+1,length-size);
-            length+=size-1;
-            i+=size-1;
-            size = strlen(temp)+1;
-            if(str != nullptr)
-            {
-                delete str;
-                str = new char[length];
-                memcpy(str,temp,size);
-            }
-            delete temp;
-            temp = nullptr;
-        }
-        else
-            i++;
-    }
+    if(matrix[row][col] == c)
+        return true;
+    return false;
 }
+
+bool FindSubstr(char *matrix, int rows, int cols, char *str, int lrow, int lcol)
+{
+    for (int i = 0; i < 4; i++)
+    {
+        auto row = lrow;
+        auto col = lcol;
+        switch(i)
+        {
+            case 0:
+            {
+                row = lrow-1;
+                if(row < 0)
+                    continue;
+                if(matrix[row][col] != str[g_stri])
+                    continue;
+            }
+            break;
+            case 1:
+            {
+                col = lcol-1;
+                if(row < 0)
+                    continue;
+                if(matrix[row][col] != str[g_stri])
+                    continue;
+            }
+            break;
+            case 2:
+            {
+                row = lrow+1;
+                if(row < 0)
+                    continue;
+                if(matrix[row][col] != str[g_stri])
+                    continue;
+            }
+            break;
+            case 3:
+            {
+                col = lcol+1;
+                if(row < 0)
+                    continue;
+                if(matrix[row][col] != str[g_stri])
+                    continue;
+            }                        
+            break;
+        }
+
+        g_stri++;
+        if(FindSubstr(matrix,rows,cols,&str[g_stri],row,col))
+            return true;
+        else
+            g_stri--;
+    }
+    return false;
+}
+
+bool hasPath(char** matrix, int rows, int cols, char *str)
+{
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            if (!FindFirstChar(matrix, i, j, findstr[g_stri]))
+                continue;
+
+            auto frow = i;
+            auto fcol = j;
+            g_stri++;
+
+            if (FindSubstr(matrix, rows, cols, &findstr[g_stri], frow, fcol))
+                return true;
+            else
+                g_stri--;
+        }
+    }
+
+    return false;
+}
+
+#pragma region xxx
+// shared_ptr<list<list<char>>> InitMatrix()
+// {
+//     cout << "Input M * N: ";
+//     auto M =0;
+//     auto N = 0;
+//     cin >> M >> N;
+//     shared_ptr<list<list<char>>> charlist(new list<list<char>>());
+//     for(int i=0;i<M;i++)
+//     {
+//         list<char> tmp;
+//         for(int j=0;j<N;j++)
+//         {
+//             cout << "Input Detail char:(MaxCount N):";
+//             auto value = '0';
+//             cin >> value;
+//             tmp.push_back(value);
+//         }
+//         charlist->push_back(tmp);
+//     }
+
+//     return charlist;
+// }
+
+// bool FindSubString(shared_ptr<list<list<char>>> mylist,string substring)
+// {
+//     return false;
+// }
+#pragma endregion
 
 int main()
 {
-    auto size = sizeof("We Are Happy.");
-    char* str = new char[size];
-    memcpy(str,"We Are Happy.",size);    
-    replaceSpace(str,size);
-    std::cout<<str<<std::endl;
-    delete str;
-    str = nullptr;
+    // auto myList = InitMatrix();
+    // string findstr = "bcced";
+    // auto resul = FindSubString(myList,findstr);
+
+    auto result = hasPath(pmatrix, rows, cols, findstr);
+    getchar();
     return 0;
 }
+=======
+地上有一个m行和n列的方格。一个机器人从坐标0,0的格子开始移动，
+每一次只能向左，右，上，下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于k的格子。 
+例如，当k为18时，机器人能够进入方格（35,37），因为3+5+3+7 = 18。
+但是，它不能进入方格（35,38），因为3+5+3+8 = 19。
+请问该机器人能够达到多少个格子？
+*/
+
+#include <iostream>
+
+
+int main()
+{
+
+    return 0;
+}
+>>>>>>> 8e6267647aa1c3ae17fd7313981edcfd5fe98f04
