@@ -10,6 +10,7 @@ class MyApp(QtWidgets.QMainWindow, Ui_MainWindow):
         self.CalcBtn.clicked.connect(self.CalculateTax)
 
     def CalculateTax(self):
+        #python exception? i do not know how to.
         price = int(self.Price_edit.toPlainText())
         tax = float(self.TexRate_edit.toPlainText())
         total_price = price + (tax*price)
